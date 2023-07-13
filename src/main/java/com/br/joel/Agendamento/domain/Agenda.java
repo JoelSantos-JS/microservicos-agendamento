@@ -33,5 +33,5 @@ public class Agenda {
     @Column(name = "email")
     private String email;
     @ManyToOne()
-    private Set<Paciente> paciente = new HashSet<>();
+    private Paciente paciente ;
 }
