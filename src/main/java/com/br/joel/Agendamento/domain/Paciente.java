@@ -22,7 +22,6 @@ public class Paciente {
     private  String sobrenome;
     private  String cpf;
     private  String email;
-    @OneToMany(mappedBy = "paciente")
-    private  Agenda agenda;
+
 
 }
