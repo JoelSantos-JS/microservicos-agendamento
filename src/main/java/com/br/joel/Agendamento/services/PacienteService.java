@@ -41,7 +41,7 @@ public class PacienteService {
 
 
     public  List<Paciente> updatePaciente(Long id , Paciente paciente) {
-        Paciente paciente1 = pacienteRepository.getOne(id);
+        Paciente paciente1 = getById(id);
         paciente1.setNome(paciente.getNome());
         paciente1.setCpf(paciente.getCpf());
         paciente1.setSobrenome(paciente.getSobrenome());
