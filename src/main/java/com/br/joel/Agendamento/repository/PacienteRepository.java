@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente , Long> {
-    List<Paciente> findByName(String nome);
+    List<Paciente> findBynome(String nome);
+    List<Paciente> findByCpf(String cpf);
 }

@@ -24,7 +24,16 @@ public class PacienteService {
         return  pacienteRepository.findById(id).get();
     }
 
-    public  List<Paciente> createPaciente(Paciente paciente) {
+    public  List<Paciente> createPaciente(Paciente paciente) throws Exception {
+      List<Paciente> paciente2 = getAllPacientes();
+
+
+
+        if (paciente2.stream().anyMatch(e -> e.getCpf().equals(paciente.getCpf()))) {
+            throw new RuntimeException("CPF já existe na lista de pacientes!");
+        }
+
+
         pacienteRepository.save(paciente);
 
         return  getAllPacientes();
@@ -46,5 +55,12 @@ public class PacienteService {
 
     public  void  deleteById(long id ) {
         pacienteRepository.deleteById(id);
+    }
+
+
+    public  List<Paciente> findCpf(String cpf) {
+        List<Paciente> paciente = pacienteRepository.findByCpf(cpf);
+
+        return paciente;
     }
 }
