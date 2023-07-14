@@ -1,12 +1,16 @@
 package com.br.joel.Agendamento.services;
 
+import com.br.joel.Agendamento.DTO.PacienteDTO;
 import com.br.joel.Agendamento.domain.Paciente;
 import com.br.joel.Agendamento.repository.PacienteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -16,40 +20,46 @@ public class PacienteService {
 
 
 
-    public List<Paciente> getAllPacientes() {
-        return  pacienteRepository.findAll();
+    public Page<PacienteDTO> getAllPacientes(Pageable pageable) {
+        Page<Paciente > paciente = pacienteRepository.findAll(pageable);
+
+         Page<PacienteDTO> pacienteDTO = paciente.map(e -> new PacienteDTO(e));paciente.stream().map(e -> new PacienteDTO(e)).toList();
+            return  pacienteDTO;
     }
 
     public  Paciente getById(Long id ) {
         return  pacienteRepository.findById(id).get();
     }
 
-    public  List<Paciente> createPaciente(Paciente paciente) throws Exception {
-      List<Paciente> paciente2 = getAllPacientes();
+    public PacienteDTO createPaciente(PacienteDTO paciente) throws Exception {
+        List<Paciente> pacientesExistentes = pacienteRepository.findAll();
 
-
-
-        if (paciente2.stream().anyMatch(e -> e.getCpf().equals(paciente.getCpf()))) {
+        if (pacientesExistentes.stream().anyMatch(e -> e.getCpf().equals(paciente.cpf()))) {
             throw new RuntimeException("CPF já existe na lista de pacientes!");
         }
 
+        Paciente novoPaciente = new Paciente();
+        novoPaciente.setNome(paciente.nome());
+        novoPaciente.setCpf(paciente.cpf());
+        novoPaciente.setSobrenome(paciente.sobrenome());
+        novoPaciente.setEmail(paciente.email());
 
-        pacienteRepository.save(paciente);
+        Paciente pacienteSalvo = pacienteRepository.save(novoPaciente);
 
-        return  getAllPacientes();
+        return new PacienteDTO(pacienteSalvo);
     }
 
 
-    public  List<Paciente> updatePaciente(Long id , Paciente paciente) {
+    public  PacienteDTO updatePaciente(Long id , PacienteDTO paciente) {
         Paciente paciente1 = getById(id);
-        paciente1.setNome(paciente.getNome());
-        paciente1.setCpf(paciente.getCpf());
-        paciente1.setSobrenome(paciente.getSobrenome());
-        paciente1.setEmail(paciente.getEmail());
+        paciente1.setNome(paciente.nome());
+        paciente1.setCpf(paciente.cpf());
+        paciente1.setSobrenome(paciente.sobrenome());
+        paciente1.setEmail(paciente.email());
 
         pacienteRepository.save(paciente1);
 
-        return  getAllPacientes();
+        return  new PacienteDTO(paciente1);
     }
 
 

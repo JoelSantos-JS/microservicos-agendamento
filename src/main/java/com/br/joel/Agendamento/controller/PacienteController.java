@@ -1,8 +1,11 @@
 package com.br.joel.Agendamento.controller;
 
+import com.br.joel.Agendamento.DTO.PacienteDTO;
 import com.br.joel.Agendamento.domain.Paciente;
 import com.br.joel.Agendamento.services.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,22 +21,22 @@ public class PacienteController {
 
 
     @GetMapping
-    public ResponseEntity<List<Paciente>> getAll() {
-        return  ResponseEntity.ok().body(pacienteService.getAllPacientes());
+    public ResponseEntity<Page<PacienteDTO>> getAll(Pageable pageable) {
+        return  ResponseEntity.ok().body(pacienteService.getAllPacientes(pageable));
     }
 
 
 
     @PostMapping
-    public  ResponseEntity<List<Paciente>> create(@RequestBody Paciente paciente) throws Exception {
+    public  ResponseEntity<PacienteDTO> create(@RequestBody PacienteDTO paciente) throws Exception {
      return  ResponseEntity.ok().body(pacienteService.createPaciente(paciente));
     }
 
 
 
     @PutMapping(value = "/{id}")
-    public  ResponseEntity<List<Paciente>> update(@PathVariable long
-                                                   id , @RequestBody Paciente paciente) {
+    public  ResponseEntity<PacienteDTO> update(@PathVariable long
+                                                   id , @RequestBody PacienteDTO paciente) {
     return  ResponseEntity.ok().body(pacienteService.updatePaciente(id,paciente));
     }
 
