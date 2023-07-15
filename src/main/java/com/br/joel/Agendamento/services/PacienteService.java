@@ -4,6 +4,7 @@ import com.br.joel.Agendamento.DTO.PacienteDTO;
 import com.br.joel.Agendamento.domain.Paciente;
 import com.br.joel.Agendamento.repository.PacienteRepository;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,9 @@ public class PacienteService {
     @Autowired
     PacienteRepository pacienteRepository;
 
+    @Autowired
+    ModelMapper modelMapper;
+
 
 
     public Page<PacienteDTO> getAllPacientes(Pageable pageable) {
@@ -27,41 +31,41 @@ public class PacienteService {
             return  pacienteDTO;
     }
 
-    public  Paciente getById(Long id ) {
-        return  pacienteRepository.findById(id).get();
+    public  PacienteDTO getById(Long id ) {
+        PacienteDTO paciente = modelMapper.map(pacienteRepository.findById(id).get(), PacienteDTO.class);
+        return  paciente;
     }
 
     public PacienteDTO createPaciente(PacienteDTO paciente) throws Exception {
         List<Paciente> pacientesExistentes = pacienteRepository.findAll();
 
-        if (pacientesExistentes.stream().anyMatch(e -> e.getCpf().equals(paciente.cpf()))) {
+        if (pacientesExistentes.stream().anyMatch(e -> e.getCpf().equals(paciente.getCpf()))) {
             throw new RuntimeException("CPF já existe na lista de pacientes!");
         }
 
-        Paciente novoPaciente = new Paciente();
-        novoPaciente.setNome(paciente.nome());
-        novoPaciente.setCpf(paciente.cpf());
-        novoPaciente.setSobrenome(paciente.sobrenome());
-        novoPaciente.setEmail(paciente.email());
+        Paciente novoPaciente = modelMapper.map(paciente, Paciente.class);
 
         Paciente pacienteSalvo = pacienteRepository.save(novoPaciente);
 
-        return new PacienteDTO(pacienteSalvo);
+        return modelMapper.map(pacienteSalvo, PacienteDTO.class);
     }
 
 
     public  PacienteDTO updatePaciente(Long id , PacienteDTO paciente) {
-        Paciente paciente1 = getById(id);
-        paciente1.setNome(paciente.nome());
-        paciente1.setCpf(paciente.cpf());
-        paciente1.setSobrenome(paciente.sobrenome());
-        paciente1.setEmail(paciente.email());
+        Paciente paciente1 = pacienteRepository.findByid(id);
 
-        pacienteRepository.save(paciente1);
+        if (paciente1 == null) {
+            throw new RuntimeException("Paciente não encontrado");
+        }
 
-        return  new PacienteDTO(paciente1);
+        modelMapper.map(paciente, paciente1);
+
+        Paciente pacienteSalvo = pacienteRepository.save(paciente1);
+
+        return  modelMapper.map(pacienteSalvo, PacienteDTO.class);
+
+
     }
-
 
     public  void  deleteById(long id ) {
         pacienteRepository.deleteById(id);

@@ -26,6 +26,12 @@ public class PacienteController {
     }
 
 
+    @GetMapping(value = "/{id}")
+    public  ResponseEntity<PacienteDTO> getById(@PathVariable Long id) {
+        return  ResponseEntity.ok().body(pacienteService.getById(id));
+    }
+
+
 
     @PostMapping
     public  ResponseEntity<PacienteDTO> create(@RequestBody PacienteDTO paciente) throws Exception {
