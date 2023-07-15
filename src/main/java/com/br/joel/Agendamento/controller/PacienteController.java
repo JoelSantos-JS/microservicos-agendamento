@@ -3,6 +3,7 @@ package com.br.joel.Agendamento.controller;
 import com.br.joel.Agendamento.DTO.PacienteDTO;
 import com.br.joel.Agendamento.domain.Paciente;
 import com.br.joel.Agendamento.services.PacienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ public class PacienteController {
 
 
     @PostMapping
-    public  ResponseEntity<PacienteDTO> create(@RequestBody PacienteDTO paciente) throws Exception {
+    public  ResponseEntity<PacienteDTO> create(@Valid @RequestBody PacienteDTO paciente) throws Exception {
      return  ResponseEntity.ok().body(pacienteService.createPaciente(paciente));
     }
 
@@ -42,7 +43,7 @@ public class PacienteController {
 
     @PutMapping(value = "/{id}")
     public  ResponseEntity<PacienteDTO> update(@PathVariable long
-                                                   id , @RequestBody PacienteDTO paciente) {
+                                                   id , @Valid @RequestBody PacienteDTO paciente) {
     return  ResponseEntity.ok().body(pacienteService.updatePaciente(id,paciente));
     }
 
