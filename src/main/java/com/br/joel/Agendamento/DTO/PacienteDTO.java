@@ -3,6 +3,8 @@ package com.br.joel.Agendamento.DTO;
 import com.br.joel.Agendamento.domain.Paciente;
 
 public class PacienteDTO {
+
+    private  Long id;
     private String nome;
     private String sobrenome;
     private String email;
@@ -12,7 +14,17 @@ public class PacienteDTO {
         // Construtor vazio
     }
 
-    public PacienteDTO(String nome, String sobrenome, String email, String cpf) {
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public PacienteDTO(long id, String nome, String sobrenome, String email, String cpf) {
+        this.id =  id;
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.email = email;
@@ -20,7 +32,7 @@ public class PacienteDTO {
     }
 
     public PacienteDTO(Paciente paciente) {
-        this(paciente.getNome(), paciente.getSobrenome(), paciente.getEmail(), paciente.getCpf());
+        this(paciente.getId(), paciente.getNome(), paciente.getSobrenome(), paciente.getEmail(), paciente.getCpf());
     }
 
     // Getters e setters

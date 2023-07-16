@@ -1,5 +1,6 @@
 package com.br.joel.Agendamento.controller;
 
+import com.br.joel.Agendamento.DTO.AgendaDTO;
 import com.br.joel.Agendamento.domain.Agenda;
 import com.br.joel.Agendamento.services.AgendaService;
 
@@ -25,7 +26,7 @@ public class AgendaController {
 
 
     @PostMapping
-    public ResponseEntity<Agenda> save(Agenda agenda) {
+    public ResponseEntity<Agenda> save(@RequestBody AgendaDTO agenda) throws Exception {
         return ResponseEntity.ok().body(agendaService.create(agenda));
     }
 

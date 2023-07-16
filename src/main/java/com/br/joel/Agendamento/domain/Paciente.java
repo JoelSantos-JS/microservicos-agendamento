@@ -7,31 +7,32 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "paciente")
+@AllArgsConstructor
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Paciente {
+public class Paciente implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     @NotEmpty(message = "O campo nome deve ser preenchido")
-    private  String nome;
+    private String nome;
 
     @NotEmpty(message = "O campo sobrenome deve ser preenchido")
-    private  String sobrenome;
-    private  String cpf;
+    private String sobrenome;
+    private String cpf;
 
     @NotEmpty(message = "O campo email deve ser preenchido")
-    private  String email;
+    private String email;
 
 
+    public Paciente() {
 
-
-
+    }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -31,9 +32,29 @@ public class PacienteService {
             return  pacienteDTO;
     }
 
-    public  PacienteDTO getById(Long id ) {
-        PacienteDTO paciente = modelMapper.map(pacienteRepository.findById(id).get(), PacienteDTO.class);
-        return  paciente;
+
+    public  List<PacienteDTO> getAllPacientes() {
+        List<Paciente> paciente = pacienteRepository.findAll();
+
+        List<PacienteDTO> pacienteDTO = paciente.stream().map(e -> new PacienteDTO(e)).toList();
+        return  pacienteDTO;
+    }
+
+    public Optional<PacienteDTO> getById(Long id ) {
+        Optional<Paciente> pacienteOptional = pacienteRepository.findById(id);
+
+        if (pacienteOptional.isPresent()) {
+            PacienteDTO pacienteDTO = modelMapper.map(pacienteOptional.get(), PacienteDTO.class);
+            return Optional.of(pacienteDTO);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public  Optional<Paciente> getByIdPaciente(Long id ) {
+        Optional<Paciente> pacienteOptional = pacienteRepository.findById(id);
+
+        return  pacienteOptional;
     }
 
     public PacienteDTO createPaciente(PacienteDTO paciente) throws Exception {

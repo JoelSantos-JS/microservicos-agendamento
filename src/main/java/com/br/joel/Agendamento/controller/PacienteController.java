@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/paciente")
@@ -28,7 +29,7 @@ public class PacienteController {
 
 
     @GetMapping(value = "/{id}")
-    public  ResponseEntity<PacienteDTO> getById(@PathVariable Long id) {
+    public  ResponseEntity<Optional<PacienteDTO>> getById(@PathVariable Long id) {
         return  ResponseEntity.ok().body(pacienteService.getById(id));
     }
 
