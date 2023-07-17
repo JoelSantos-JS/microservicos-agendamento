@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 public class TokenService {
@@ -23,7 +24,7 @@ public class TokenService {
             Algorithm algorithm  = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("auth-api")
-                    .withClaim("email", user.getLogin())
+                    .withSubject(user.getLogin())
                     .withExpiresAt(getExpiration())
                     .sign(algorithm);
             return token;
@@ -47,6 +48,6 @@ public class TokenService {
     }
 
     private Instant  getExpiration(){
-        return Instant.now().plusSeconds(60 * 60 * 24 * 30);
+        return LocalDateTime.now().plusSeconds(60 * 60 * 24 * 30).toInstant(java.time.ZoneOffset.UTC);
     }
 }

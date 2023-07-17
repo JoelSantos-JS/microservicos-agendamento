@@ -1,7 +1,8 @@
-package com.br.joel.Agendamento.config;
+package com.br.joel.Agendamento.controller;
 
 import com.br.joel.Agendamento.DTO.AutenticatorDTO;
 import com.br.joel.Agendamento.DTO.ResgiterDTO;
+import com.br.joel.Agendamento.config.TokenService;
 import com.br.joel.Agendamento.domain.User;
 import com.br.joel.Agendamento.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -27,12 +28,17 @@ public class AuthenticatorController {
         @Autowired
     UserRepository userRepository;
 
+
+        @Autowired
+    TokenService tokenService;
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AutenticatorDTO dto){
+    public ResponseEntity login(@RequestBody @Valid AutenticatorDTO dto) throws Exception {
         var userNameAndPassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
         var authentication = authenticationManager.authenticate(userNameAndPassword);
 
-        return  ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User)  authentication.getPrincipal());
+
+        return  ResponseEntity.ok().body(token);
     }
 
 
