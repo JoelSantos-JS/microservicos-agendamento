@@ -14,9 +14,8 @@ import java.time.Instant;
 @Service
 public class TokenService {
 
-@Value("${token.secret}")
-    private String  secret = "XXXX";
 
+    private String  secret = "JWT_SECRET";
     public  String generateToken(User user) throws Exception {
 
 
@@ -34,6 +33,18 @@ public class TokenService {
         }
     }
 
+
+    public  String validateToken(String token) throws Exception {
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return  JWT.require(algorithm).withIssuer("auth-api").build().verify(token).getSubject();
+
+        }catch (Exception e){
+            throw  new Exception("Token inválido");
+        }
+
+    }
 
     private Instant  getExpiration(){
         return Instant.now().plusSeconds(60 * 60 * 24 * 30);
