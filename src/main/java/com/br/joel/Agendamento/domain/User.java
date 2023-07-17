@@ -13,22 +13,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
+@Entity(name = "users")
 @Table(name = "users")
-@AllArgsConstructor
+
 @NoArgsConstructor
 @Data
-@Builder
+
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private  String id;
     private  String login;
     private  String password;
 
     @Enumerated(EnumType.STRING)
     private  Roles role;
+
+
+
+    public  User(String login, String password, Roles role) {
+        this.login = login;
+        this.password = password;
+        this.role =  role;
+
+
+    }
 
 
     @Override
